@@ -8,6 +8,7 @@ import {
   SITE_DESCRIPTION,
   SITE_URL,
   OG_IMAGE,
+  TWITTER_IMAGE,
 } from "@/config/seo";
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [OG_IMAGE],
+    images: [TWITTER_IMAGE],
   },
   alternates: {
     canonical: SITE_URL,

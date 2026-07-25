@@ -7,7 +7,7 @@ import FeatureGrid from "@/components/sections/feature-grid";
 import FAQAccordion from "@/components/sections/faq-accordion";
 import Footer from "@/components/sections/footer";
 
-import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, OG_IMAGE } from "@/config/seo";
+import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, OG_IMAGE, TWITTER_IMAGE } from "@/config/seo";
 
 export const metadata = {
   title: "Free Social Media Video Downloader",

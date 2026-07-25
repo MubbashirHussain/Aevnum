@@ -21,14 +21,20 @@ client/
 ├── tsconfig.json                           # TypeScript compiler config
 │
 ├── app/                                    # Next.js App Router root
-│   ├── layout.tsx                          # Root layout (AppProvider + AdsenseScript)
+│   ├── layout.tsx                          # Root layout (AppProvider + AdsenseScript + JSON-LD)
 │   ├── page.tsx                            # Home page (/)
 │   ├── globals.css                         # Global CSS (Tailwind import + custom animations)
 │   ├── constant.ts                         # [EMPTY] Reserved for app-level constants
+│   ├── favicon.ico                         # Static favicon
+│   ├── apple-icon.png                      # Static Apple touch icon
+│   ├── icon.svg                            # Static SVG icon
+│   ├── robots.ts                           # robots.txt generator (disallow /api/)
+│   ├── sitemap.ts                          # Sitemap generator
 │   ├── api/
 │   │   └── video/
 │   │       └── route.js                    # Edge proxy: /api/video?streamToken=...
 │   ├── contact/
+│   │   ├── layout.tsx                      # Contact page metadata
 │   │   └── page.tsx                        # Contact form page (/contact)
 │   ├── cookies/
 │   │   └── page.tsx                        # Cookie Policy page (/cookies)
@@ -44,11 +50,14 @@ client/
 │   │   ├── downloader-wrapper.tsx          # Main orchestrator — all download state
 │   │   ├── faq-accordion.tsx               # Interactive FAQ with accordion animation
 │   │   ├── feature-grid.tsx                # 4-feature highlight grid
-│   │   ├── footer.tsx                      # Site footer (legal links, copyright)
+│   │   ├── footer.tsx                      # Site footer (legal links, copyright, logo)
 │   │   ├── hero-section.tsx                # Landing hero (title, subtitle, badge)
-│   │   ├── nav-bar.tsx                     # Sticky top navigation bar
+│   │   ├── nav-bar.tsx                     # Sticky top navigation bar (logo)
 │   │   ├── platform-grid.tsx               # Platform compatibility 2x2 grid
 │   │   └── step-guide.tsx                  # 3-step how-to guide
+│   │
+│   ├── seo/                                # SEO utilities
+│   │   └── json-ld.tsx                     # JSON-LD structured data components
 │   │
 │   └── ui/                                 # Reusable atomic UI components
 │       ├── index.ts                        # Barrel export of all UI components
@@ -73,6 +82,7 @@ client/
 │           └── index.tsx                   # Wrapper for all legal/info pages
 │
 ├── config/
+│   ├── seo.ts                              # Shared SEO constants (SITE_NAME, SITE_URL, OG_IMAGE)
 │   └── zustand/
 │       └── index.tsx                       # Zustand store: AdSense slot IDs
 │
@@ -104,9 +114,17 @@ client/
 │
 └── public/
     ├── ads.txt                             # AdSense publisher verification
-    ├── file.svg                            # Next.js default SVG
-    ├── globe.svg                           # Next.js default SVG
-    └── window.svg                          # Next.js default SVG
+    ├── favicon.ico                         # Static favicon
+    ├── apple-icon.png                      # Apple touch icon
+    ├── icon-192.png                        # PWA icon (192×192)
+    ├── icon-512.png                        # PWA icon (512×512)
+    ├── icon.svg                            # SVG icon
+    └── images/
+        ├── logo.svg                        # Full logo (light fill)
+        ├── logo-dark.svg                   # Full logo (dark fill)
+        ├── logo-icon.svg                   # Compact logo mark (light fill)
+        ├── og-image.png                    # Open Graph preview image (1200×630)
+        └── twitter-image.png               # Twitter card preview image
 ```
 
 ---
@@ -150,7 +168,7 @@ client/
 
 ### `public/`
 **Purpose**: Statically served files.  
-**Responsibility**: `ads.txt` for AdSense verification; default Next.js SVGs.
+**Responsibility**: `ads.txt` for AdSense verification; favicon, icons, logos, OG/Twitter images.
 
 ---
 

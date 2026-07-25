@@ -23,7 +23,8 @@ export const SITE_NAME = "Aether Downloader";
 export const SITE_DESCRIPTION =
   "Extract uncompressed source media streams directly from Instagram, TikTok, YouTube, and Facebook. Zero compression, high speed.";
 export const SITE_URL = "https://downloadreels.site";
-export const OG_IMAGE = `${SITE_URL}/og-image.png`;
+export const OG_IMAGE = `${SITE_URL}/images/og-image.png`;
+export const TWITTER_IMAGE = `${SITE_URL}/images/twitter-image.png`;
 ```
 
 ### Root Layout (`app/layout.tsx`)
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [OG_IMAGE],
+    images: [TWITTER_IMAGE],
   },
   alternates: {
     canonical: SITE_URL,
@@ -161,7 +162,7 @@ twitter: {
   card: "summary_large_image",
   title: "Aether Downloader | Free Social Media Video Downloader",
   description: SITE_DESCRIPTION,
-  images: [OG_IMAGE],
+  images: [TWITTER_IMAGE],
 },
 ```
 
@@ -203,11 +204,20 @@ A `WebApplication` JSON-LD schema is rendered in the root layout's `<head>`:
 
 ## Icons & Favicon
 
-**Files**:
-- [`app/icon.tsx`](../app/icon.tsx) — Generates a 32×32 PNG favicon using `ImageResponse`
-- [`app/apple-icon.tsx`](../app/apple-icon.tsx) — Generates a 180×180 PNG Apple touch icon using `ImageResponse`
+Static files placed in `app/` — Next.js auto-links them:
 
-Both render the letter "A" on a black background. Next.js automatically adds the appropriate `<link>` tags to `<head>`.
+- [`app/favicon.ico`](../app/favicon.ico) — Browser tab favicon
+- [`app/icon.svg`](../app/icon.svg) — SVG icon (`<link rel="icon">`)
+- [`app/apple-icon.png`](../app/apple-icon.png) — Apple touch icon
+- [`public/icon-192.png`](../public/icon-192.png) — PWA icon (192×192)
+- [`public/icon-512.png`](../public/icon-512.png) — PWA icon (512×512)
+
+Next.js automatically adds the appropriate `<link>` tags to `<head>`.
+
+## Brand Logos
+
+- **NavBar**: Uses `/images/logo-icon.svg` (light mode) and `/images/logo-dark.svg` (dark mode), theme-aware via `useTheme()`.
+- **Footer**: Uses `/images/logo-icon.svg` (light mode) and `/images/logo-dark.svg` (dark mode), theme-aware via `useTheme()`.
 
 ---
 
@@ -268,4 +278,4 @@ Both render the letter "A" on a black background. Next.js automatically adds the
 | 🟢 Low      | Keyword-optimize H1       | ⚠️ Open  | Hero H1 "Decentralized Media Stream Extraction" still generic                 |
 | 🟢 Low      | Add favicon metadata      | ✅ Done | `app/icon.tsx` + `app/apple-icon.tsx` — auto-linked by Next.js               |
 
-_Related files: [`config/seo.ts`](../config/seo.ts), [`app/layout.tsx`](../app/layout.tsx), [`app/page.tsx`](../app/page.tsx), [`app/robots.ts`](../app/robots.ts), [`app/sitemap.ts`](../app/sitemap.ts), [`app/icon.tsx`](../app/icon.tsx), [`app/apple-icon.tsx`](../app/apple-icon.tsx), [`components/seo/json-ld.tsx`](../components/seo/json-ld.tsx), [`components/ui/video-downloader.tsx`](../components/ui/video-downloader.tsx), [`app/contact/layout.tsx`](../app/contact/layout.tsx), [`app/terms-and-conditions/page.tsx`](../app/terms-and-conditions/page.tsx), [`app/terms/page.tsx`](../app/terms/page.tsx), [`app/privacy/page.tsx`](../app/privacy/page.tsx), [`app/cookies/page.tsx`](../app/cookies/page.tsx), [`public/ads.txt`](../public/ads.txt)_
+_Related files: [`config/seo.ts`](../config/seo.ts), [`app/layout.tsx`](../app/layout.tsx), [`app/page.tsx`](../app/page.tsx), [`app/robots.ts`](../app/robots.ts), [`app/sitemap.ts`](../app/sitemap.ts), [`components/seo/json-ld.tsx`](../components/seo/json-ld.tsx), [`components/ui/video-downloader.tsx`](../components/ui/video-downloader.tsx), [`components/sections/nav-bar.tsx`](../components/sections/nav-bar.tsx), [`components/sections/footer.tsx`](../components/sections/footer.tsx), [`app/contact/layout.tsx`](../app/contact/layout.tsx), [`app/terms-and-conditions/page.tsx`](../app/terms-and-conditions/page.tsx), [`app/terms/page.tsx`](../app/terms/page.tsx), [`app/privacy/page.tsx`](../app/privacy/page.tsx), [`app/cookies/page.tsx`](../app/cookies/page.tsx), [`public/ads.txt`](../public/ads.txt), [`public/favicon.ico`](../public/favicon.ico), [`public/apple-icon.png`](../public/apple-icon.png), [`public/icon.svg`](../public/icon.svg), [`public/images/`](../public/images/)_

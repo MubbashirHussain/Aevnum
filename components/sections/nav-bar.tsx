@@ -12,18 +12,13 @@ export default function NavBar() {
       <div className="max-w-6xl mx-auto px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
         {/* Branding Logo & Status */}
         <div className="flex items-center gap-3">
-          {/* Crisp Inline SVG Logo */}
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border transition-all duration-300 bg-zinc-50 border-zinc-200 text-zinc-900 dark:bg-zinc-950 dark:border-neutral-900 dark:text-white">
-            <svg
-              className="w-4.5 h-4.5 stroke-[2] stroke-current"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="23 7 16 12 23 17 23 7" />
-              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-            </svg>
+          {/* Brand Logo */}
+          <div className="w-9 h-9 flex items-center justify-center shrink-0">
+            <img
+              src={isDark ? "/images/logo-dark.svg" : "/images/logo-icon.svg"}
+              alt="Aether Downloader"
+              className="w-full h-full"
+            />
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-sm font-light tracking-tight leading-none truncate text-neutral-900 dark:text-neutral-100">

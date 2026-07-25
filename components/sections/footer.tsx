@@ -1,10 +1,11 @@
 "use client";
 
-import { useBottomAd } from "@/context/AppContext";
+import { useBottomAd, useTheme } from "@/context/AppContext";
 import { cn } from "@/lib/utils";
 
 export default function Footer() {
   const { showStickyBottomAd } = useBottomAd();
+  const { isDark } = useTheme();
 
   return (
     <footer
@@ -19,19 +20,12 @@ export default function Footer() {
         >
           {/* Logo & Brand */}
           <div className="flex items-center gap-2">
-            <div
-              className="w-6 h-6 rounded flex items-center justify-center shrink-0 border bg-zinc-50 border-zinc-200 text-zinc-900 dark:bg-zinc-950 dark:border-neutral-900 dark:text-white"
-            >
-              <svg
-                className="w-3.5 h-3.5 stroke-[2] stroke-current"
-                viewBox="0 0 24 24"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polygon points="23 7 16 12 23 17 23 7" />
-                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-              </svg>
+            <div className="w-6 h-6 flex items-center justify-center shrink-0">
+              <img
+                src={isDark ? "/images/logo-dark.svg" : "/images/logo-icon.svg"}
+                alt="Aether Downloader"
+                className="w-full h-full"
+              />
             </div>
             <span
               className="text-xs font-light tracking-tight text-zinc-900 dark:text-neutral-300"
