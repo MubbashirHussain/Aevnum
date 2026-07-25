@@ -1,8 +1,12 @@
 import LegalLayout from "@/components/ui/LegalLayout";
+import { SITE_URL } from "@/config/seo";
 
 export const metadata = {
   title: "Privacy Policy | Aether Downloader",
   description: "Privacy Policy for Aether Downloader, explaining our stateless processing and third-party advertising cookies.",
+  alternates: {
+    canonical: `${SITE_URL}/privacy`,
+  },
 };
 
 export default function PrivacyPage() {

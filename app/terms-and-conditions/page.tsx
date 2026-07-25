@@ -1,4 +1,13 @@
 import LegalLayout from "@/components/ui/LegalLayout";
+import { SITE_NAME, SITE_URL } from "@/config/seo";
+
+export const metadata = {
+  title: "Terms and Conditions",
+  description: `Terms and conditions of using ${SITE_NAME} stateless extraction service.`,
+  alternates: {
+    canonical: `${SITE_URL}/terms`,
+  },
+};
 
 const TermsPage = () => (
   <LegalLayout title="Terms of Service">
