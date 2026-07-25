@@ -40,11 +40,11 @@ export function VideoDownloader({
           Fast Link Parser
         </div>
 
-        <h1
+        <h2
           className="text-2xl sm:text-4xl font-extrabold tracking-tight mt-3 mb-2 leading-snug text-zinc-900 dark:text-white"
         >
           Extract Social Media Streams with Zero Compression
-        </h1>
+        </h2>
 
         <p
           className="text-xs sm:text-sm leading-relaxed max-w-xl text-zinc-505 dark:text-zinc-400"

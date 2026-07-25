@@ -7,10 +7,28 @@ import FeatureGrid from "@/components/sections/feature-grid";
 import FAQAccordion from "@/components/sections/faq-accordion";
 import Footer from "@/components/sections/footer";
 
+import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, OG_IMAGE } from "@/config/seo";
+
 export const metadata = {
-  title: "Aether Downloader | Free Social Media Video Downloader",
-  description:
-    "Extract uncompressed source media streams directly from Instagram, TikTok, YouTube, and Facebook. Zero compression, high speed.",
+  title: "Free Social Media Video Downloader",
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: `${SITE_NAME} | Free Social Media Video Downloader`,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} | Free Social Media Video Downloader`,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
 };
 
 export default function App() {

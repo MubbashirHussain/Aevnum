@@ -1,8 +1,12 @@
 import LegalLayout from "@/components/ui/LegalLayout";
+import { SITE_URL } from "@/config/seo";
 
 export const metadata = {
   title: "Cookie Policy | Aether Downloader",
   description: "Cookie Policy and settings matrix for Aether Downloader service, explaining how advertising and preference cookies are handled.",
+  alternates: {
+    canonical: `${SITE_URL}/cookies`,
+  },
 };
 
 export default function CookiesPage() {

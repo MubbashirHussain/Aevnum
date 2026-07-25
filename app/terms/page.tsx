@@ -1,8 +1,12 @@
 import LegalLayout from "@/components/ui/LegalLayout";
+import { SITE_URL } from "@/config/seo";
 
 export const metadata = {
   title: "Terms of Service | Aether Downloader",
   description: "Terms and conditions of using Aether Downloader stateless extraction service.",
+  alternates: {
+    canonical: `${SITE_URL}/terms`,
+  },
 };
 
 export default function TermsPage() {
