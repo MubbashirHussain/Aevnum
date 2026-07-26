@@ -504,7 +504,6 @@ export default function DownloaderWrapper() {
             <button
               onClick={() => {
                 setShowStickyBottomAd(false);
-                triggerNotification("Bottom anchor ad dismissed.", "info");
               }}
               className="absolute -top-7.5 right-4 border text-[9px] font-mono flex items-center gap-1 cursor-pointer p-1 rounded-full shadow-md z-50 bg-white border-zinc-200 text-zinc-550 hover:text-zinc-800 dark:bg-zinc-900 dark:border-neutral-800 dark:text-neutral-400 dark:hover:text-white"
               title="Close Sponsor"
