@@ -1,4 +1,4 @@
-# DEPLOYMENT.md — Aether Downloader
+# DEPLOYMENT.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -6,7 +6,7 @@
 
 ## Deployment Architectures
 
-Aether Downloader is optimized for automated cloud deployments. It divides responsibilities into a static/Edge-based client application and a dynamic processing backend.
+Aevnum is optimized for automated cloud deployments. It divides responsibilities into a static/Edge-based client application and a dynamic processing backend.
 
 ```
 +------------------------------------+      +-----------------------------------+

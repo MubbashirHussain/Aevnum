@@ -1,4 +1,4 @@
-# COMPONENTS.md — Aether Downloader
+# COMPONENTS.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -107,7 +107,7 @@ components/
 
 **Renders**:
 - Inline SVG logo (video camera icon)
-- Brand name "Aether Downloader" + online status ping
+- Brand name "Aevnum" + online status ping
 - Anchor nav links: `#downloader-section`, `#platform-grid`, `#step-guide`, `#faq-accordion`
 - `ThemeToggle`
 
@@ -178,7 +178,7 @@ components/
 **State**: `openIndex: number | null` — which FAQ item is expanded
 
 **FAQs** (hardcoded):
-1. Does Aether store videos?
+1. Does Aevnum store videos?
 2. Is there a daily limit?
 3. How to download on mobile?
 4. Why is there a countdown screen?

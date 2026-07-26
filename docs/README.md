@@ -1,12 +1,12 @@
-# Aether Downloader — Documentation Index
+# Aevnum — Documentation Index
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
 ---
 
-## What is Aether Downloader?
+## What is Aevnum?
 
-**Aether Downloader** is a high-performance, stateless social media video extraction web application. It enables users to download videos from Instagram, TikTok, YouTube, and Facebook directly from their browser — with zero compression, zero server-side storage, and zero accounts required.
+**Aevnum** is a high-performance, stateless social media video extraction web application. It enables users to download videos from Instagram, TikTok, YouTube, and Facebook directly from their browser — with zero compression, zero server-side storage, and zero accounts required.
 
 The service is monetized via **Google AdSense** (banner, sidebar, sticky anchor, and interstitial ad placements). A session/unlock gate creates a controlled ad-view window before each download is granted, which is the core business mechanism.
 

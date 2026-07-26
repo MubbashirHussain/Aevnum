@@ -1,4 +1,4 @@
-# STATE_MANAGEMENT.md — Aether Downloader
+# STATE_MANAGEMENT.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -6,7 +6,7 @@
 
 ## State Management Overview
 
-Aether Downloader utilizes a hybrid state management architecture tailored to its lightweight frontend profile. Rather than employing a single, all-encompassing global store, state is segregated by lifecycle, scope, and volatility.
+Aevnum utilizes a hybrid state management architecture tailored to its lightweight frontend profile. Rather than employing a single, all-encompassing global store, state is segregated by lifecycle, scope, and volatility.
 
 ```mermaid
 graph TD

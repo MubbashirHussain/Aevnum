@@ -2,8 +2,8 @@ import LegalLayout from "@/components/ui/LegalLayout";
 import { SITE_URL } from "@/config/seo";
 
 export const metadata = {
-  title: "Cookie Policy | Aether Downloader",
-  description: "Cookie Policy and settings matrix for Aether Downloader service, explaining how advertising and preference cookies are handled.",
+  title: "Cookie Policy | Aevnum",
+  description: "Cookie Policy and settings matrix for Aevnum service, explaining how advertising and preference cookies are handled.",
   alternates: {
     canonical: `${SITE_URL}/cookies`,
   },
@@ -33,7 +33,7 @@ export default function CookiesPage() {
             2. Classification of Cookies & Storage Used
           </h2>
           <p className="leading-relaxed">
-            Aether Downloader utilizes two main classes of cookies and storage tools:
+            Aevnum utilizes two main classes of cookies and storage tools:
           </p>
           <ul className="list-disc list-inside space-y-2 mt-2 text-neutral-400 pl-2">
             <li>
@@ -66,13 +66,13 @@ export default function CookiesPage() {
               <tbody className="divide-y divide-neutral-900 bg-black/40 text-neutral-400">
                 <tr>
                   <td className="px-4 py-3 font-semibold text-neutral-300">vdl_theme</td>
-                  <td className="px-4 py-3">Aether (Local)</td>
+                  <td className="px-4 py-3">Aevnum (Local)</td>
                   <td className="px-4 py-3">Persistent</td>
                   <td className="px-4 py-3">Remembers user preference for Dark or Light mode configuration.</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-semibold text-neutral-300">vdl_premium_history</td>
-                  <td className="px-4 py-3">Aether (Local)</td>
+                  <td className="px-4 py-3">Aevnum (Local)</td>
                   <td className="px-4 py-3">Persistent</td>
                   <td className="px-4 py-3">Stores recent links you parsed so you can access them again quickly.</td>
                 </tr>

@@ -1,4 +1,4 @@
-# SEO.md — Aether Downloader
+# SEO.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -19,7 +19,7 @@ All pages use Next.js App Router's `export const metadata` pattern. The root lay
 **File**: [`config/seo.ts`](../config/seo.ts)
 
 ```typescript
-export const SITE_NAME = "Aether Downloader";
+export const SITE_NAME = "Aevnum";
 export const SITE_DESCRIPTION =
   "Extract uncompressed source media streams directly from Instagram, TikTok, YouTube, and Facebook. Zero compression, high speed.";
 export const SITE_URL = "https://downloadreels.site";
@@ -34,8 +34,8 @@ export const TWITTER_IMAGE = `${SITE_URL}/images/twitter-image.png`;
 ```typescript
 export const metadata: Metadata = {
   title: {
-    default: "Aether Downloader | Free Social Media Video Downloader",
-    template: "%s | Aether Downloader",
+    default: "Aevnum | Free Social Media Video Downloader",
+    template: "%s | Aevnum",
   },
   description: SITE_DESCRIPTION,
   openGraph: {
@@ -64,12 +64,12 @@ The root layout also renders a `WebApplication` JSON-LD schema script and static
 
 | Route                   | Title                                            | Canonical                           | Description                                                                                                                       |
 | ----------------------- | ------------------------------------------------ | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                     | "Free Social Media Video Downloader \| Aether..." | `SITE_URL`                          | Extract uncompressed source media streams directly from Instagram, TikTok, YouTube, and Facebook. Zero compression, high speed.  |
-| `/terms`                | "Terms of Service \| Aether Downloader"          | `SITE_URL + "/terms"`               | Terms and conditions of using Aether Downloader stateless extraction service.                                                     |
-| `/privacy`              | "Privacy Policy \| Aether Downloader"            | `SITE_URL + "/privacy"`             | Privacy Policy for Aether Downloader, explaining our stateless processing and third-party advertising cookies.                    |
-| `/cookies`              | "Cookie Policy \| Aether Downloader"             | `SITE_URL + "/cookies"`             | Cookie Policy and settings matrix for Aether Downloader service, explaining how advertising and preference cookies are handled.   |
-| `/contact`              | "Contact \| Aether Downloader"                   | `SITE_URL + "/contact"`             | Contact the Aether Downloader webmaster team for API access inquiries, DMCA notifications, and operational errors.                |
-| `/terms-and-conditions` | "Terms and Conditions \| Aether Downloader"      | `SITE_URL + "/terms"` (canonical)   | Terms and conditions of using Aether Downloader stateless extraction service.                                                     |
+| `/`                     | "Free Social Media Video Downloader \| Aevnum..." | `SITE_URL`                          | Extract uncompressed source media streams directly from Instagram, TikTok, YouTube, and Facebook. Zero compression, high speed.  |
+| `/terms`                | "Terms of Service \| Aevnum"          | `SITE_URL + "/terms"`               | Terms and conditions of using Aevnum stateless extraction service.                                                     |
+| `/privacy`              | "Privacy Policy \| Aevnum"            | `SITE_URL + "/privacy"`             | Privacy Policy for Aevnum, explaining our stateless processing and third-party advertising cookies.                    |
+| `/cookies`              | "Cookie Policy \| Aevnum"             | `SITE_URL + "/cookies"`             | Cookie Policy and settings matrix for Aevnum service, explaining how advertising and preference cookies are handled.   |
+| `/contact`              | "Contact \| Aevnum"                   | `SITE_URL + "/contact"`             | Contact the Aevnum webmaster team for API access inquiries, DMCA notifications, and operational errors.                |
+| `/terms-and-conditions` | "Terms and Conditions \| Aevnum"      | `SITE_URL + "/terms"` (canonical)   | Terms and conditions of using Aevnum stateless extraction service.                                                     |
 | All other pages         | Inherits root layout default                     | `SITE_URL` (root layout default)    | Inherits root layout description                                                                                                  |
 
 ---
@@ -151,7 +151,7 @@ All pages inherit OG defaults from the root layout.
 ```typescript
 // Home page
 openGraph: {
-  title: "Aether Downloader | Free Social Media Video Downloader",
+  title: "Aevnum | Free Social Media Video Downloader",
   description: SITE_DESCRIPTION,
   url: SITE_URL,
   siteName: SITE_NAME,
@@ -160,7 +160,7 @@ openGraph: {
 },
 twitter: {
   card: "summary_large_image",
-  title: "Aether Downloader | Free Social Media Video Downloader",
+  title: "Aevnum | Free Social Media Video Downloader",
   description: SITE_DESCRIPTION,
   images: [TWITTER_IMAGE],
 },
@@ -191,7 +191,7 @@ A `WebApplication` JSON-LD schema is rendered in the root layout's `<head>`:
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Aether Downloader",
+  "name": "Aevnum",
   "url": "https://downloadreels.site",
   "description": "Free social media video downloader for Instagram, TikTok, YouTube, and Facebook.",
   "applicationCategory": "MultimediaApplication",

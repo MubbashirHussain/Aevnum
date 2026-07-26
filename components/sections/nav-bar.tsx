@@ -16,13 +16,13 @@ export default function NavBar() {
           <div className="w-9 h-9 flex items-center justify-center shrink-0">
             <img
               src={isDark ? "/images/logo-dark.svg" : "/images/logo-icon.svg"}
-              alt="Aether Downloader"
+              alt="Aevnum"
               className="w-full h-full"
             />
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-sm font-light tracking-tight leading-none truncate text-neutral-900 dark:text-neutral-100">
-              Aether Downloader
+              Aevnum
             </span>
             <span className="text-[9px] font-mono text-emerald-500 mt-1 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shrink-0" />

@@ -2,7 +2,7 @@ export function WebApplicationJsonLd() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "Aether Downloader",
+    name: "Aevnum",
     url: "https://downloadreels.site",
     description:
       "Free social media video downloader for Instagram, TikTok, YouTube, and Facebook.",

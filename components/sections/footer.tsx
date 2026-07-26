@@ -23,14 +23,14 @@ export default function Footer() {
             <div className="w-6 h-6 flex items-center justify-center shrink-0">
               <img
                 src={isDark ? "/images/logo-dark.svg" : "/images/logo-icon.svg"}
-                alt="Aether Downloader"
+                alt="Aevnum"
                 className="w-full h-full"
               />
             </div>
             <span
               className="text-xs font-light tracking-tight text-zinc-900 dark:text-neutral-300"
             >
-              Aether Downloader Studio
+              Aevnum Studio
             </span>
           </div>
 
@@ -77,7 +77,7 @@ export default function Footer() {
           className="text-[9px] font-mono tracking-widest uppercase font-light text-zinc-450 dark:text-neutral-500"
         >
           <p>
-            © {new Date().getFullYear()} Aether Downloader. Engineered for high
+            © {new Date().getFullYear()} Aevnum. Engineered for high
             performance & compliant monetization.
           </p>
         </div>

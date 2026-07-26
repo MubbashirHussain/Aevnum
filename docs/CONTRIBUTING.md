@@ -1,12 +1,12 @@
-# CONTRIBUTING.md — Aether Downloader
+# CONTRIBUTING.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
 ---
 
-## Welcome to Aether Downloader Contributions
+## Welcome to Aevnum Contributions
 
-Aether Downloader is a stateless extraction utility built on Next.js 16. To maintain performance, clean monetization architectures, and code reliability, all contributors must align with the standards defined below.
+Aevnum is a stateless extraction utility built on Next.js 16. To maintain performance, clean monetization architectures, and code reliability, all contributors must align with the standards defined below.
 
 ---
 

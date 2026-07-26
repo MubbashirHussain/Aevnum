@@ -27,7 +27,7 @@ function Footer({ isDark }: { isDark: boolean }) {
             <span
               className={`text-xs font-bold ${isDark ? "text-zinc-100" : "text-zinc-900"}`}
             >
-              Aether Downloader Studio
+              Aevnum Studio
             </span>
           </div>
 
@@ -55,7 +55,7 @@ function Footer({ isDark }: { isDark: boolean }) {
 
         <div className="text-[9px] text-zinc-500 font-mono">
           <p>
-            © {new Date().getFullYear()} Aether Downloader. Engineered for
+            © {new Date().getFullYear()} Aevnum. Engineered for
             hyper-speed downloads and clean monetization.
           </p>
         </div>

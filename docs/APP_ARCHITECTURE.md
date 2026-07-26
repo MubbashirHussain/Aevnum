@@ -1,4 +1,4 @@
-# APP_ARCHITECTURE.md — Aether Downloader
+# APP_ARCHITECTURE.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -6,7 +6,7 @@
 
 ## System Overview
 
-Aether Downloader is a **Next.js 16 App Router** application paired with an **external Node.js backend**. The frontend acts as a thin orchestration layer: it accepts URLs from the user, calls the backend API to resolve CDN stream tokens, and then streams the media file directly from the backend to the user's browser.
+Aevnum is a **Next.js 16 App Router** application paired with an **external Node.js backend**. The frontend acts as a thin orchestration layer: it accepts URLs from the user, calls the backend API to resolve CDN stream tokens, and then streams the media file directly from the backend to the user's browser.
 
 No video data is ever stored on the frontend server. All media resolution happens transiently on the backend (hosted on Render.com).
 

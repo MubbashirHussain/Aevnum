@@ -8,9 +8,9 @@ export default function FAQAccordion() {
 
   const faqs = [
     {
-      question: "Does Aether Downloader store copies of downloaded videos?",
+      question: "Does Aevnum store copies of downloaded videos?",
       answer:
-        "No. Aether Downloader operates as a stateless streaming engine. We process the platform's API signals and hand direct CDN stream links directly back to your browser client. No media is stored on our servers.",
+        "No. Aevnum operates as a stateless streaming engine. We process the platform's API signals and hand direct CDN stream links directly back to your browser client. No media is stored on our servers.",
     },
     {
       question: "Is there a daily limit on the number of extractions?",
@@ -20,7 +20,7 @@ export default function FAQAccordion() {
     {
       question: "How do you download videos on mobile devices (iOS/Android)?",
       answer:
-        "Simply access Aether through your mobile browser (Safari, Chrome, or Firefox). Paste the link, generate the download path, and use your native browser file manager to save the media to your local camera roll.",
+        "Simply access Aevnum through your mobile browser (Safari, Chrome, or Firefox). Paste the link, generate the download path, and use your native browser file manager to save the media to your local camera roll.",
     },
     {
       question: "Why does the site require an interstitial countdown screen?",

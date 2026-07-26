@@ -2,8 +2,8 @@ import LegalLayout from "@/components/ui/LegalLayout";
 import { SITE_URL } from "@/config/seo";
 
 export const metadata = {
-  title: "Privacy Policy | Aether Downloader",
-  description: "Privacy Policy for Aether Downloader, explaining our stateless processing and third-party advertising cookies.",
+  title: "Privacy Policy | Aevnum",
+  description: "Privacy Policy for Aevnum, explaining our stateless processing and third-party advertising cookies.",
   alternates: {
     canonical: `${SITE_URL}/privacy`,
   },
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
             1. Zero-Retention & Stateless Privacy
           </h2>
           <p className="leading-relaxed">
-            At Aether Downloader, user privacy is our highest priority. Our extraction engine operates as a 100% 
+            At Aevnum, user privacy is our highest priority. Our extraction engine operates as a 100% 
             stateless service. We do not store, log, cache, or archive any media files, download records, or search queries. 
             All extraction processes are performed transiently in active server memory and delivered directly to your client 
             web browser interface.
@@ -35,7 +35,7 @@ export default function PrivacyPage() {
           </h2>
           <p className="leading-relaxed">
             The platform does not require account creation, registration, email sign-ups, or payment configurations. 
-            As a result, Aether Downloader does not collect, sell, or distribute personal identifiable information.
+            As a result, Aevnum does not collect, sell, or distribute personal identifiable information.
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
           <p className="leading-relaxed">
             This platform uses Google AdSense to serve contextual and personalized advertisements. Google, as a third-party vendor, 
             uses cookies to serve ads on our site. Google's use of advertising cookies enables it and its partners to serve 
-            ads to our visitors based on their visit to Aether and other websites on the Internet. 
+            ads to our visitors based on their visit to Aevnum and other websites on the Internet. 
           </p>
           <p className="leading-relaxed mt-2">
             You may opt out of personalized advertising by visiting Google's ad settings, or configure your browser's cookie settings 

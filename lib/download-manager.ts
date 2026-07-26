@@ -3,7 +3,7 @@ const API_BASE = process.env.NEXT_BACKEND_PUBLIC_API_URL;
 /**
  * Stores incomplete download info in localStorage so the user can resume.
  */
-const RESUME_STORAGE_KEY = "aether_resume_downloads";
+const RESUME_STORAGE_KEY = "aevmum_resume_downloads";
 
 export interface DownloadProgress {
   downloadId: string;
