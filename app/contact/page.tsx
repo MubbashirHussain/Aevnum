@@ -31,7 +31,7 @@ export default function ContactPage() {
           <CheckCircle className="w-8 h-8 text-emerald-500" />
           <h2 className="text-base font-semibold text-neutral-250">Message Submitted</h2>
           <p className="text-xs text-neutral-450 leading-relaxed max-w-sm">
-            Thank you for contacting the Aether Downloader webmaster team. We evaluate compliance inquiries, 
+            Thank you for contacting the Aevnum webmaster team. We evaluate compliance inquiries, 
             technical error notifications, and operational issues within 48 business hours.
           </p>
           <button

@@ -1,4 +1,4 @@
-# ENVIRONMENT.md — Aether Downloader
+# ENVIRONMENT.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -6,7 +6,7 @@
 
 ## Environment Variables Matrix
 
-Aether Downloader uses key configurations injected at build and runtime to manage ad networks, server base pointers, and API targeting.
+Aevnum uses key configurations injected at build and runtime to manage ad networks, server base pointers, and API targeting.
 
 | Variable Name | Required | Scope | Default Value | Target Component | Description |
 |---------------|----------|-------|---------------|------------------|-------------|

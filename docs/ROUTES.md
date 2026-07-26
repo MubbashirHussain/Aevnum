@@ -1,4 +1,4 @@
-# ROUTES.md — Aether Downloader
+# ROUTES.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -6,7 +6,7 @@
 
 ## Routing System
 
-Aether uses **Next.js 16 App Router**. All routes are defined by folder structure under `app/`. Page components export `metadata` objects for SEO. The only API route is the edge streaming proxy.
+Aevnum uses **Next.js 16 App Router**. All routes are defined by folder structure under `app/`. Page components export `metadata` objects for SEO. The only API route is the edge streaming proxy.
 
 ---
 
@@ -42,7 +42,7 @@ graph LR
 **Metadata**:
 ```typescript
 export const metadata = {
-  title: "Aether Downloader | Free Social Media Video Downloader",
+  title: "Aevnum | Free Social Media Video Downloader",
   description: "Extract uncompressed source media streams directly from Instagram, TikTok, YouTube, and Facebook. Zero compression, high speed.",
 };
 ```
@@ -93,8 +93,8 @@ export const metadata = {
 **Metadata**:
 ```typescript
 export const metadata = {
-  title: "Privacy Policy | Aether Downloader",
-  description: "Privacy Policy for Aether Downloader, explaining our stateless processing and third-party advertising cookies.",
+  title: "Privacy Policy | Aevnum",
+  description: "Privacy Policy for Aevnum, explaining our stateless processing and third-party advertising cookies.",
 };
 ```
 
@@ -118,8 +118,8 @@ export const metadata = {
 **Metadata**:
 ```typescript
 export const metadata = {
-  title: "Cookie Policy | Aether Downloader",
-  description: "Cookie Policy and settings matrix for Aether Downloader service, explaining how advertising and preference cookies are handled.",
+  title: "Cookie Policy | Aevnum",
+  description: "Cookie Policy and settings matrix for Aevnum service, explaining how advertising and preference cookies are handled.",
 };
 ```
 
@@ -133,8 +133,8 @@ export const metadata = {
 
 | Key | Provider | Duration | Purpose |
 |-----|---------|---------|---------|
-| `vdl_theme` | Aether (Local) | Persistent | Dark/light mode preference |
-| `vdl_premium_history` | Aether (Local) | Persistent | Recent download history |
+| `vdl_theme` | Aevnum (Local) | Persistent | Dark/light mode preference |
+| `vdl_premium_history` | Aevnum (Local) | Persistent | Recent download history |
 | `__gads` / `__gac` | Google AdSense | 13 Months | Personalized advertising |
 | `IDE` / `DSID` | DoubleClick (Google) | 1 Year | Ad conversion tracking |
 
@@ -151,8 +151,8 @@ export const metadata = {
 **Metadata**:
 ```typescript
 export const metadata = {
-  title: "Terms of Service | Aether Downloader",
-  description: "Terms and conditions of using Aether Downloader stateless extraction service.",
+  title: "Terms of Service | Aevnum",
+  description: "Terms and conditions of using Aevnum stateless extraction service.",
 };
 ```
 

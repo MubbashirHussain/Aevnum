@@ -8,7 +8,7 @@ export default function FAQAccordion() {
 
   const faqs = [
     {
-      question: "Does Aether Downloader store copies of downloaded videos?",
+      question: "Does Aevnum store copies of downloaded videos?",
       answer:
         "No. Aether Downloader operates as a stateless streaming engine. We process the platform's API signals and hand direct CDN stream links directly back to your browser client. No media is stored on our servers.",
     },

@@ -27,7 +27,7 @@ function Footer({ isDark }: { isDark: boolean }) {
             <span
               className={`text-xs font-bold ${isDark ? "text-zinc-100" : "text-zinc-900"}`}
             >
-              Aether Downloader Studio
+              Aevnum Studio
             </span>
           </div>
 

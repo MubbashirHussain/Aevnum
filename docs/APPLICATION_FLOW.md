@@ -1,4 +1,4 @@
-# APPLICATION_FLOW.md — Aether Downloader
+# APPLICATION_FLOW.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -6,7 +6,7 @@
 
 ## Project Purpose
 
-Aether Downloader is a **free social media video downloader**. Its business model is ad-supported: users get unlimited downloads in exchange for viewing an interstitial advertisement for a fixed countdown period before each download is granted. The frontend never exposes raw CDN URLs — all media access is gated through short-lived `streamToken`s issued by the backend.
+Aevnum is a **free social media video downloader**. Its business model is ad-supported: users get unlimited downloads in exchange for viewing an interstitial advertisement for a fixed countdown period before each download is granted. The frontend never exposes raw CDN URLs — all media access is gated through short-lived `streamToken`s issued by the backend.
 
 ---
 
@@ -14,7 +14,7 @@ Aether Downloader is a **free social media video downloader**. Its business mode
 
 ```mermaid
 journey
-    title Aether Downloader — Full User Journey
+    title Aevnum — Full User Journey
     section Arrival
       Open site: 5: User
       See hero + downloader: 5: User

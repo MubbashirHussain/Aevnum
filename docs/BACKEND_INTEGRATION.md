@@ -1,4 +1,4 @@
-# BACKEND_INTEGRATION.md — Aether Downloader
+# BACKEND_INTEGRATION.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 

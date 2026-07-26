@@ -1,4 +1,4 @@
-# Aether API — Frontend Integration Guide
+# Aevnum API — Frontend Integration Guide
 
 Base URL: `http://localhost:3000` (development) or your production URL.
 

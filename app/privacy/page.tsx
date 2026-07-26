@@ -2,7 +2,7 @@ import LegalLayout from "@/components/ui/LegalLayout";
 import { SITE_URL } from "@/config/seo";
 
 export const metadata = {
-  title: "Privacy Policy | Aether Downloader",
+  title: "Privacy Policy | Aevnum",
   description: "Privacy Policy for Aether Downloader, explaining our stateless processing and third-party advertising cookies.",
   alternates: {
     canonical: `${SITE_URL}/privacy`,
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
           <p className="leading-relaxed">
             This platform uses Google AdSense to serve contextual and personalized advertisements. Google, as a third-party vendor, 
             uses cookies to serve ads on our site. Google's use of advertising cookies enables it and its partners to serve 
-            ads to our visitors based on their visit to Aether and other websites on the Internet. 
+            ads to our visitors based on their visit to Aevnum and other websites on the Internet. 
           </p>
           <p className="leading-relaxed mt-2">
             You may opt out of personalized advertising by visiting Google's ad settings, or configure your browser's cookie settings 

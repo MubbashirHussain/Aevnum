@@ -16,7 +16,7 @@ export default function NavBar() {
           <div className="w-9 h-9 flex items-center justify-center shrink-0">
             <img
               src={isDark ? "/images/logo-dark.svg" : "/images/logo-icon.svg"}
-              alt="Aether Downloader"
+              alt="Aevnum"
               className="w-full h-full"
             />
           </div>

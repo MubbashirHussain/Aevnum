@@ -24,7 +24,7 @@ export default function StepGuide() {
     {
       step: 2,
       title: "Execute Processing Request",
-      copy: "Insert the clean URL into the input field above. Aether’s cloud parsers automatically evaluate platform metadata signatures.",
+      copy: "Insert the clean URL into the input field above. Aevnum’s cloud parsers automatically evaluate platform metadata signatures.",
       svg: (
         <svg
           className="w-5 h-5 text-neutral-400"

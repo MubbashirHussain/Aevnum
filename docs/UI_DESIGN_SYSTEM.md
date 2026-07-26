@@ -1,4 +1,4 @@
-# UI_DESIGN_SYSTEM.md — Aether Downloader
+# UI_DESIGN_SYSTEM.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -6,7 +6,7 @@
 
 ## Design Philosophy
 
-Aether Downloader uses a **monochromatic, technical aesthetic** — minimalist zinc/neutral tones, monospace typography for metadata, and micro-animations for premium feel. The design language is inspired by developer tools and CDN dashboards. No bright colors. No gradients in the UI palette — only subtle blur and shadow depth.
+Aevnum uses a **monochromatic, technical aesthetic** — minimalist zinc/neutral tones, monospace typography for metadata, and micro-animations for premium feel. The design language is inspired by developer tools and CDN dashboards. No bright colors. No gradients in the UI palette — only subtle blur and shadow depth.
 
 **Brand identity**: High-tech extraction engine, stateless CDN interfaces, edge computing aesthetics.
 

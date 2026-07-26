@@ -2,7 +2,7 @@ import LegalLayout from "@/components/ui/LegalLayout";
 import { SITE_URL } from "@/config/seo";
 
 export const metadata = {
-  title: "Terms of Service | Aether Downloader",
+  title: "Terms of Service | Aevnum",
   description: "Terms and conditions of using Aether Downloader stateless extraction service.",
   alternates: {
     canonical: `${SITE_URL}/terms`,
@@ -59,7 +59,7 @@ export default function TermsPage() {
           <p className="leading-relaxed">
             All media content remains the exclusive property of its respective content creators and hosting social platform 
             operators. Users are strictly responsible for confirming that their extractions comply with fair use and copyright 
-            statutes. Aether Downloader does not authorize, endorse, or promote any intellectual property infringements.
+            statutes. Aevnum does not authorize, endorse, or promote any intellectual property infringements.
           </p>
         </div>
 

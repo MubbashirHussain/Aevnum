@@ -72,7 +72,7 @@ export default function CookiesPage() {
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-semibold text-neutral-300">vdl_premium_history</td>
-                  <td className="px-4 py-3">Aether (Local)</td>
+                  <td className="px-4 py-3">Aevnum (Local)</td>
                   <td className="px-4 py-3">Persistent</td>
                   <td className="px-4 py-3">Stores recent links you parsed so you can access them again quickly.</td>
                 </tr>

@@ -1,4 +1,4 @@
-# FILE_STRUCTURE.md — Aether Downloader
+# FILE_STRUCTURE.md — Aevnum
 
 > ⚠️ This documentation must always reflect the current implementation. Whenever related code is added, removed, or modified, this document must be updated in the same pull request.
 
@@ -183,7 +183,7 @@ client/
 ### `app/page.tsx`
 - **Purpose**: Home page route (`/`).
 - **Responsibilities**: Composes all section components in order. Sets page-level metadata.
-- **Metadata**: `title: "Aether Downloader | Free Social Media Video Downloader"`.
+- **Metadata**: `title: "Aevnum | Free Social Media Video Downloader"`.
 - **Exports**: Default `App` component.
 
 ### `app/api/video/route.js`
