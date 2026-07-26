@@ -30,7 +30,7 @@ export default function Footer() {
             <span
               className="text-xs font-light tracking-tight text-zinc-900 dark:text-neutral-300"
             >
-              Aether Downloader Studio
+              Aevnum Studio
             </span>
           </div>
 
@@ -77,7 +77,7 @@ export default function Footer() {
           className="text-[9px] font-mono tracking-widest uppercase font-light text-zinc-450 dark:text-neutral-500"
         >
           <p>
-            © {new Date().getFullYear()} Aether Downloader. Engineered for high
+            © {new Date().getFullYear()} Aevnum. Engineered for high
             performance & compliant monetization.
           </p>
         </div>

@@ -22,7 +22,7 @@ export default function NavBar() {
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-sm font-light tracking-tight leading-none truncate text-neutral-900 dark:text-neutral-100">
-              Aether Downloader
+              Aevnum
             </span>
             <span className="text-[9px] font-mono text-emerald-500 mt-1 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shrink-0" />

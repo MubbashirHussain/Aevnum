@@ -55,7 +55,7 @@ function Footer({ isDark }: { isDark: boolean }) {
 
         <div className="text-[9px] text-zinc-500 font-mono">
           <p>
-            © {new Date().getFullYear()} Aether Downloader. Engineered for
+            © {new Date().getFullYear()} Aevnum. Engineered for
             hyper-speed downloads and clean monetization.
           </p>
         </div>
