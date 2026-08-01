@@ -68,6 +68,21 @@ interface DownloadHistoryItem {
   isAudioAvailable: boolean;
 }
 
+/** Convert a Blob to a base64 data string for Filesystem.writeFile. */
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      // FileReader returns "data:<mime>;base64,<payload>" — strip the prefix
+      const comma = result.indexOf(",");
+      resolve(comma >= 0 ? result.slice(comma + 1) : result);
+    };
+    reader.onerror = () => reject(reader.error || new Error("Blob read failed"));
+    reader.readAsDataURL(blob);
+  });
+}
+
 export default function DownloaderWrapper() {
   const {
     adsenseClientId,
@@ -365,6 +380,7 @@ export default function DownloaderWrapper() {
 
     if (isNative) {
       let progressListener: any = null;
+      let downloadSucceeded = false;
       try {
         // Dynamically import @capacitor/filesystem (No need for @capacitor/file-transfer)
         const { Filesystem, Directory } = await import("@capacitor/filesystem");
@@ -380,24 +396,86 @@ export default function DownloaderWrapper() {
           ? streamUrl
           : `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_API_URL || ""}${streamUrl}`;
 
-        // 1. Determine file extension via HEAD request
+        // 1. Verify backend status & inspect headers BEFORE touching the filesystem.
+        //    Native HTTP (Capacitor) silently saves HTTP error pages (text/plain /
+        //    application/json) to disk, so we must reject them here with a clear error.
         let ext = "mp4";
+        let contentType = "video/mp4";
+        let contentLength = 0;
+        let verifyRes: Response | null = null;
         try {
-          const headRes = await fetch(absoluteUrl, { method: "HEAD" });
-          const contentType =
-            headRes.headers.get("content-type") || "video/mp4";
-          if (contentType.includes("webm")) ext = "webm";
-          else if (contentType.includes("mp3")) ext = "mp3";
-          else if (contentType.includes("m4a")) ext = "m4a";
-          logInfo("extension resolved", { contentType, ext });
-        } catch (e) {
-          logWarn("HEAD request failed — falling back to .mp4", {
-            error: e instanceof Error ? e.message : String(e),
+          verifyRes = await fetch(absoluteUrl, {
+            method: "GET",
+            headers: { Range: "bytes=0-" },
           });
-          // Fallback to default extension
+          if (!verifyRes.ok) {
+            // Backend or proxy returned a real error status — surface it descriptively
+            let errBody = "";
+            try {
+              errBody = (await verifyRes.text()).slice(0, 300);
+            } catch {
+              // ignore body read failure
+            }
+            logError("backend stream verification failed", {
+              status: verifyRes.status,
+              contentType: verifyRes.headers.get("content-type") || "(none)",
+              body: errBody || "(empty)",
+            });
+            throw new Error(
+              `Backend stream error (HTTP ${verifyRes.status})${
+                errBody ? `: ${errBody}` : ""
+              }. The stream may be invalid or expired.`,
+            );
+          }
+
+          contentType = verifyRes.headers.get("content-type") || "video/mp4";
+          contentLength = parseInt(
+            verifyRes.headers.get("content-length") || "0",
+            10,
+          );
+
+          // Reject text/html, text/plain, application/json error pages
+          const ct = contentType.toLowerCase();
+          if (
+            ct.includes("text/html") ||
+            ct.includes("text/plain") ||
+            ct.includes("application/json")
+          ) {
+            logError("backend returned non-media content type", {
+              contentType,
+            });
+            throw new Error(
+              `Backend returned ${contentType} instead of a video stream — this is an error page, not media.`,
+            );
+          }
+
+          if (ct.includes("webm")) ext = "webm";
+          else if (ct.includes("mp3")) ext = "mp3";
+          else if (ct.includes("m4a")) ext = "m4a";
+          logInfo("backend stream verified", {
+            status: verifyRes.status,
+            contentType,
+            contentLength,
+            ext,
+          });
+
+          // Release the verify body so we don't hold the stream open on mobile
+          verifyRes.body?.cancel().catch(() => {});
+        } catch (verifyErr: any) {
+          // Distinguish our own descriptive errors from network failures
+          if (
+            verifyErr?.message?.startsWith?.("Backend stream") ||
+            verifyErr?.message?.startsWith?.("Backend returned")
+          ) {
+            throw verifyErr;
+          }
+          logWarn("stream verification failed — retrying via native download", {
+            message: verifyErr?.message || String(verifyErr),
+          });
+          // Fall through; Filesystem.downloadFile will surface its own error
         }
 
-        // 2. Platform & Directory Setup
+        // 2. Platform & Directory Setup (Android 10+ Scoped Storage friendly)
         const platform = capacitorObj?.getPlatform
           ? capacitorObj.getPlatform()
           : "web";
@@ -413,12 +491,14 @@ export default function DownloaderWrapper() {
           filename,
         });
 
-        // 3. Android Permissions Check
+        // 3. Android Permissions Check (only needed for ExternalStorage)
         if (isAndroid) {
           const status = await Filesystem.checkPermissions();
           if (status.publicStorage !== "granted") {
-            await Filesystem.requestPermissions();
-            logInfo("native download — requested storage permissions");
+            const req = await Filesystem.requestPermissions();
+            if (req.publicStorage !== "granted") {
+              logWarn("storage permission denied — will try without it");
+            }
           }
         }
 
@@ -438,41 +518,126 @@ export default function DownloaderWrapper() {
         );
 
         // 5. Direct HTTP Native Download using Filesystem.downloadFile
-        await Filesystem.downloadFile({
-          url: absoluteUrl,
-          path: path,
-          directory: directory,
-          progress: true,
-        });
+        try {
+          await Filesystem.downloadFile({
+            url: absoluteUrl,
+            path, // filename relative to the Directory below
+            directory,
+            recursive: true, // create missing parent dirs (Download/ on Android)
+            progress: true,
+          });
+          downloadSucceeded = true;
+        } catch (nativeErr: any) {
+          // Fall back to a manual byte-stream download via fetch + writeFile
+          logWarn("Filesystem.downloadFile failed — falling back to manual stream", {
+            message: nativeErr?.message || String(nativeErr),
+          });
 
-        logSuccess("native download completed", { path, filename });
+          if (verifyRes && !verifyRes.ok) {
+            throw new Error(
+              `Backend stream error (HTTP ${verifyRes.status}) — verify the stream is valid.`,
+            );
+          }
 
-        // 6. Update Download History
-        if (parsedVideo) {
-          const entry: DownloadHistoryItem = {
-            id: parsedVideo.id,
-            title: parsedVideo.title,
-            platform: parsedVideo.platform,
-            url: videoUrl,
-            thumbnail: parsedVideo.thumbnail,
-            timestamp: "Just now",
-            formatId: "",
-            isAudioAvailable: true,
-          };
-          const updated = [entry, ...downloadHistory]
-            .filter(
-              (item, idx, arr) =>
-                idx === arr.findIndex((h) => h.url === item.url),
-            )
-            .slice(0, 6);
-          setDownloadHistory(updated);
-          localStorage.setItem("vdl_premium_history", JSON.stringify(updated));
+          // Re-fetch as a stream (the HEAD/verify fetch body is already consumed)
+          const manualRes = await fetch(absoluteUrl, {
+            headers: { Range: "bytes=0-" },
+          });
+          if (!manualRes.ok) {
+            const body = (await manualRes.text().catch(() => "")).slice(0, 300);
+            throw new Error(
+              `Backend stream error (HTTP ${manualRes.status})${
+                body ? `: ${body}` : ""
+              }.`,
+            );
+          }
+
+          const manualContentType =
+            manualRes.headers.get("content-type") || "video/mp4";
+          if (
+            manualContentType.includes("text/html") ||
+            manualContentType.includes("text/plain") ||
+            manualContentType.includes("application/json")
+          ) {
+            throw new Error(
+              `Backend returned ${manualContentType} instead of a video stream.`,
+            );
+          }
+
+          const manualReader = manualRes.body?.getReader();
+          if (!manualReader) {
+            throw new Error("Backend returned an empty response body.");
+          }
+
+          const chunks: Uint8Array[] = [];
+          let downloadedBytes = 0;
+          const manualTotal = parseInt(
+            manualRes.headers.get("content-length") || "0",
+            10,
+          );
+
+          while (true) {
+            const { done, value } = await manualReader.read();
+            if (done) break;
+            chunks.push(value);
+            downloadedBytes += value.length;
+            setStreamProgress({
+              total: manualTotal || downloadedBytes,
+              downloaded: downloadedBytes,
+            });
+          }
+
+          // Write the assembled bytes to the same target path
+          const blob = new Blob(chunks as BlobPart[], {
+            type: manualContentType,
+          });
+          const base64 = await blobToBase64(blob);
+          await Filesystem.writeFile({
+            path: path, // same relative path convention
+            directory,
+            data: base64,
+            recursive: true,
+          });
+          logSuccess("manual stream fallback completed", {
+            path,
+            bytes: downloadedBytes,
+          });
+          downloadSucceeded = true;
         }
 
-        triggerNotification(
-          `Saved to ${isAndroid ? "Downloads" : "Documents"}!`,
-          "success",
-        );
+        if (downloadSucceeded) {
+          logSuccess("native download completed", { path, filename });
+
+          // 6. Update Download History
+          if (parsedVideo) {
+            const entry: DownloadHistoryItem = {
+              id: parsedVideo.id,
+              title: parsedVideo.title,
+              platform: parsedVideo.platform,
+              url: videoUrl,
+              thumbnail: parsedVideo.thumbnail,
+              timestamp: "Just now",
+              formatId: "",
+              isAudioAvailable: true,
+            };
+            const updated = [entry, ...downloadHistory]
+              .filter(
+                (item, idx, arr) =>
+                  idx === arr.findIndex((h) => h.url === item.url),
+              )
+              .slice(0, 6);
+            setDownloadHistory(updated);
+            localStorage.setItem(
+              "vdl_premium_history",
+              JSON.stringify(updated),
+            );
+          }
+
+          triggerNotification(
+            `Saved to ${isAndroid ? "Downloads" : "Documents"}!`,
+            "success",
+          );
+        }
       } catch (error: any) {
         setStreamProgress(null);
         setDownloadError(error.message || "Native download failed");
