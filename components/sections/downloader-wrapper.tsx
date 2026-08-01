@@ -299,51 +299,53 @@ export default function DownloaderWrapper() {
       return;
     }
 
+    const capacitorObj =
+      typeof window !== "undefined" ? (window as any).Capacitor : undefined;
     const isNative =
-      typeof window !== "undefined" &&
-      (window as any).Capacitor?.isNativePlatform();
+      capacitorObj && typeof capacitorObj.isNativePlatform === "function"
+        ? capacitorObj.isNativePlatform()
+        : false;
+
+    setIsDownloadingStream(true);
+    setStreamProgress(null);
+    setDownloadError(null);
 
     if (isNative) {
+      let progressListener: any = null;
       try {
-        setIsDownloadingStream(true);
-        setStreamProgress(null);
-        setDownloadError(null);
-
-        // Dynamically import Capacitor plugins inside the handler to prevent SSR issues
+        // Dynamically import @capacitor/filesystem (No need for @capacitor/file-transfer)
         const { Filesystem, Directory } = await import("@capacitor/filesystem");
-        const { FileTransfer } = await import("@capacitor/file-transfer");
 
         const streamUrl = getStreamUrl(streamToken, true);
         const absoluteUrl = streamUrl.startsWith("http")
           ? streamUrl
           : `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_API_URL || ""}${streamUrl}`;
 
-        // Determine extension (default to mp4, query headers via HEAD request)
+        // 1. Determine file extension via HEAD request
         let ext = "mp4";
         try {
           const headRes = await fetch(absoluteUrl, { method: "HEAD" });
           const contentType =
             headRes.headers.get("content-type") || "video/mp4";
-          if (contentType.includes("webm")) {
-            ext = "webm";
-          } else if (contentType.includes("mp3")) {
-            ext = "mp3";
-          } else if (contentType.includes("m4a")) {
-            ext = "m4a";
-          }
+          if (contentType.includes("webm")) ext = "webm";
+          else if (contentType.includes("mp3")) ext = "mp3";
+          else if (contentType.includes("m4a")) ext = "m4a";
         } catch (e) {
-          // Fallback to default
+          // Fallback to default extension
         }
 
-        // Determine correct directory and path based on platform
-        const isAndroid = (window as any).Capacitor.getPlatform() === "android";
+        // 2. Platform & Directory Setup
+        const platform = capacitorObj?.getPlatform
+          ? capacitorObj.getPlatform()
+          : "web";
+        const isAndroid = platform === "android";
         const directory = isAndroid
           ? Directory.ExternalStorage
           : Directory.Documents;
         const filename = `media-${Date.now()}.${ext}`;
         const path = isAndroid ? `Download/${filename}` : filename;
 
-        // Check/request permissions on Android
+        // 3. Android Permissions Check
         if (isAndroid) {
           const status = await Filesystem.checkPermissions();
           if (status.publicStorage !== "granted") {
@@ -351,14 +353,8 @@ export default function DownloaderWrapper() {
           }
         }
 
-        // Get full native path URI
-        const fileInfo = await Filesystem.getUri({
-          directory,
-          path,
-        });
-
-        // Add progress listener
-        const progressListener = await FileTransfer.addListener(
+        // 4. Progress Listener directly on Filesystem
+        progressListener = await Filesystem.addListener(
           "progress",
           (progress: any) => {
             setStreamProgress({
@@ -368,19 +364,15 @@ export default function DownloaderWrapper() {
           },
         );
 
-        // Download via FileTransfer
-        await FileTransfer.downloadFile({
+        // 5. Direct HTTP Native Download using Filesystem.downloadFile
+        await Filesystem.downloadFile({
           url: absoluteUrl,
-          path: fileInfo.uri,
+          path: path,
+          directory: directory,
           progress: true,
         });
 
-        // Cleanup progress listener
-        await progressListener.remove();
-
-        setIsDownloadingStream(false);
-
-        // Update download history
+        // 6. Update Download History
         if (parsedVideo) {
           const entry: DownloadHistoryItem = {
             id: parsedVideo.id,
@@ -407,20 +399,20 @@ export default function DownloaderWrapper() {
           "success",
         );
       } catch (error: any) {
-        setIsDownloadingStream(false);
         setStreamProgress(null);
         setDownloadError(error.message || "Native download failed");
         triggerNotification(error.message || "Native download failed");
+      } finally {
+        if (progressListener && typeof progressListener.remove === "function") {
+          await progressListener.remove();
+        }
+        setIsDownloadingStream(false);
       }
       return;
     }
 
+    // --- Web / Browser Fallback Stream Download ---
     try {
-      setIsDownloadingStream(true);
-      setStreamProgress(null);
-      setDownloadError(null);
-
-      // Fetch the stream with ?download=1
       const streamUrl = getStreamUrl(streamToken, true);
       const res = await fetch(streamUrl);
 
@@ -434,7 +426,6 @@ export default function DownloaderWrapper() {
       );
       const contentType = res.headers.get("content-type") || "video/mp4";
 
-      // Determine extension from content type
       const ext = contentType.includes("mp4")
         ? "mp4"
         : contentType.includes("webm")
@@ -445,7 +436,6 @@ export default function DownloaderWrapper() {
         throw new Error("Response has no body stream");
       }
 
-      // Stream the response body, tracking progress
       const reader = res.body.getReader();
       const chunks: Uint8Array[] = [];
       let downloaded = 0;
@@ -463,7 +453,6 @@ export default function DownloaderWrapper() {
         });
       }
 
-      // All bytes received — build blob and trigger download
       const blob = new Blob(chunks as BlobPart[], { type: contentType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -472,9 +461,6 @@ export default function DownloaderWrapper() {
       a.click();
       URL.revokeObjectURL(url);
 
-      setIsDownloadingStream(false);
-
-      // Update download history
       if (parsedVideo) {
         const entry: DownloadHistoryItem = {
           id: parsedVideo.id,
@@ -498,9 +484,10 @@ export default function DownloaderWrapper() {
 
       triggerNotification("Download complete!", "success");
     } catch (error: any) {
-      setIsDownloadingStream(false);
       setStreamProgress(null);
       setDownloadError(error.message || "Download failed");
+    } finally {
+      setIsDownloadingStream(false);
     }
   };
 
