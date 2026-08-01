@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/file-transfer": "^2.0.4",
+    "@capacitor/filesystem": "^8.1.2",
     "clsx": "^2.1.1",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
@@ -19,6 +22,8 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/cli": "^8.5.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
