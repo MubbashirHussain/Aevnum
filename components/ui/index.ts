@@ -1,5 +1,6 @@
 export { ThemeToggle } from "./theme-toggle";
 export { Notification } from "./notification";
+export { Terminal } from "./terminal";
 export { AdBanner } from "./ad-banner";
 export { AdInspector } from "./ad-inspector";
 export { InterstitialAd } from "./interstitial-ad";

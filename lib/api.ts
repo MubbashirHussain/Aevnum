@@ -1,5 +1,7 @@
 const API_BASE = process.env.NEXT_PUBLIC_BACKEND_PUBLIC_API_URL;
 
+import { logInfo, logWarn, logError } from "@/lib/logger";
+
 interface FormatItem {
   formatId: string;
   ext: string;
@@ -37,8 +39,15 @@ export async function fetchAPI(
   options?: RequestInit,
 ): Promise<Response> {
   if (!API_BASE) {
+    logError("missing API base URL env", {
+      env: "NEXT_PUBLIC_BACKEND_PUBLIC_API_URL",
+    });
     throw new Error("Missing NEXT_PUBLIC_BACKEND_PUBLIC_API_URL");
   }
+  logInfo("http request", {
+    method: options?.method || "GET",
+    path: url.split("?")[0], // strip query strings/tokens
+  });
   const response = await fetch(`${API_BASE}${url}`, {
     ...options,
     headers: {
@@ -46,6 +55,19 @@ export async function fetchAPI(
       ...options?.headers,
     },
   });
+  if (!response.ok) {
+    logWarn("http response", {
+      status: response.status,
+      ok: response.ok,
+      path: url.split("?")[0],
+    });
+  } else {
+    logInfo("http response", {
+      status: response.status,
+      ok: response.ok,
+      path: url.split("?")[0],
+    });
+  }
   return response;
 }
 

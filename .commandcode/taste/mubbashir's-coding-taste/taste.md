@@ -43,3 +43,4 @@
 - No commented-out code committed to main and no console.log in production (use a logger). Confidence: 0.85
 - Order imports: React → Next.js → third-party → internal absolute → relative. Confidence: 0.85
 - One component per file; one concern per function. Confidence: 0.85
+- Debug/terminal diagnostic overlays should be open (expanded) by default, not collapsed. Confidence: 0.65

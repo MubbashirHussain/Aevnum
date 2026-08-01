@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 
 import {
@@ -11,9 +11,11 @@ import {
   VideoPlayer,
   PlatformSelector,
   AdSenseSlot,
+  Terminal,
 } from "@/components/ui";
 import { useAdConfig } from "@/config/zustand";
 import { cn } from "@/lib/utils";
+import { logInfo, logSuccess, logWarn, logError, logDebug } from "@/lib/logger";
 import {
   analyzeUrl,
   startSession,
@@ -127,6 +129,16 @@ export default function DownloaderWrapper() {
   } | null>(null);
   const [downloadError, setDownloadError] = useState<string | null>(null);
 
+  const bootstrapLogged = useRef(false);
+  useEffect(() => {
+    if (bootstrapLogged.current) return;
+    bootstrapLogged.current = true;
+    logInfo("terminal initialized", {
+      apiBase: process.env.NEXT_PUBLIC_BACKEND_PUBLIC_API_URL || "(unset)",
+      env: process.env.NEXT_PUBLIC_TERMINAL_DEBUG || "(unset)",
+    });
+  }, []);
+
   const triggerNotification = (
     message: string,
     type: "success" | "info" = "success",
@@ -147,14 +159,19 @@ export default function DownloaderWrapper() {
 
     if (val.includes("instagram.com")) {
       setDetectedPlatform("instagram");
+      logInfo("platform detected", { platform: "instagram" });
     } else if (val.includes("tiktok.com")) {
       setDetectedPlatform("tiktok");
+      logInfo("platform detected", { platform: "tiktok" });
     } else if (val.includes("youtube.com") || val.includes("youtu.be")) {
       setDetectedPlatform("youtube");
+      logInfo("platform detected", { platform: "youtube" });
     } else if (val.includes("facebook.com") || val.includes("fb.watch")) {
       setDetectedPlatform("facebook");
+      logInfo("platform detected", { platform: "facebook" });
     } else {
       setDetectedPlatform(null);
+      logWarn("unrecognized URL — no platform matched", { url: val });
     }
   };
 
@@ -162,6 +179,7 @@ export default function DownloaderWrapper() {
     e.preventDefault();
     if (!videoUrl) {
       setErrorMessage("Please input a valid media link first.");
+      logWarn("analyze aborted — empty URL");
       return;
     }
 
@@ -171,6 +189,7 @@ export default function DownloaderWrapper() {
       setErrorMessage(
         "Provide a valid Instagram, TikTok, YouTube, or Facebook link.",
       );
+      logWarn("analyze aborted — unsupported platform", { url: videoUrl });
       return;
     }
 
@@ -180,6 +199,8 @@ export default function DownloaderWrapper() {
     setParsedVideo(null);
     setStreamToken(null);
 
+    logInfo("analyzing URL", { platform: matchedPlatform, url: videoUrl });
+
     try {
       const { data: result, error } = await analyzeUrl(videoUrl);
       setProgress(100);
@@ -187,6 +208,7 @@ export default function DownloaderWrapper() {
 
       if (error && !result) {
         setErrorMessage(error || "No result found");
+        logError("analysis failed", { error, url: videoUrl });
         return;
       }
 
@@ -212,6 +234,13 @@ export default function DownloaderWrapper() {
           originalUrl: videoUrl,
         });
 
+        logSuccess("video parsed successfully", {
+          id: result.id,
+          platform: result.platform,
+          title: result.title,
+          formats: result.formats.length,
+        });
+
         triggerNotification(
           "CDN stream decrypted and formats loaded successfully!",
           "success",
@@ -221,6 +250,10 @@ export default function DownloaderWrapper() {
       setIsLoading(false);
       setProgress(0);
       setErrorMessage(error.message || "Failed to analyze video URL");
+      logError("analysis threw", {
+        message: error.message || String(error),
+        url: videoUrl,
+      });
     }
   };
 
@@ -247,7 +280,12 @@ export default function DownloaderWrapper() {
       setDownloadError(null);
 
       // 1. Start session — gets unlockAfter
+      logInfo("starting download session", { formatId });
       const session = await startSession(videoUrl, formatId);
+      logInfo("session created", {
+        sessionId: session.sessionId,
+        unlockAfter: session.unlockAfter,
+      });
 
       // 2. Show countdown on the button while waiting for unlockAfter
       setUnlockCountdown(session.unlockAfter);
@@ -264,10 +302,12 @@ export default function DownloaderWrapper() {
       // 3. Poll unlock after the initial wait
       const pollUnlock = async (sid: string) => {
         try {
+          logDebug("polling unlock", { sessionId: sid });
           const result = await unlockSession(sid);
           // Check if still locked
           if ("unlocked" in result) {
             const wait = Math.max(result.unlockAfter, 1);
+            logWarn("session still locked, retrying", { waitSeconds: wait });
             setTimeout(() => pollUnlock(sid), wait * 1000);
             return;
           }
@@ -275,11 +315,18 @@ export default function DownloaderWrapper() {
           setStreamToken((result as UnlockData).streamToken);
           setActiveFormatId(null);
           clearInterval(tick);
+          logSuccess("download unlocked", {
+            streamToken: (result as UnlockData).streamToken.slice(0, 12) + "…",
+          });
           triggerNotification("Download unlocked successfully!", "success");
         } catch (error: any) {
           setActiveFormatId(null);
           clearInterval(tick);
           setErrorMessage(error.message || "Failed to unlock download");
+          logError("unlock failed", {
+            message: error.message || String(error),
+            sessionId: sid,
+          });
         }
       };
 
@@ -290,6 +337,10 @@ export default function DownloaderWrapper() {
     } catch (error: any) {
       setActiveFormatId(null);
       setErrorMessage(error.message || "Failed to start download session");
+      logError("session creation failed", {
+        message: error.message || String(error),
+        formatId,
+      });
     }
   };
 
@@ -310,11 +361,19 @@ export default function DownloaderWrapper() {
     setStreamProgress(null);
     setDownloadError(null);
 
+    logInfo("download started", { mode: isNative ? "native" : "web" });
+
     if (isNative) {
       let progressListener: any = null;
       try {
         // Dynamically import @capacitor/filesystem (No need for @capacitor/file-transfer)
         const { Filesystem, Directory } = await import("@capacitor/filesystem");
+        logInfo("native download — capacitor filesystem loaded");
+        logDebug("capabilities", {
+          platform: capacitorObj?.getPlatform
+            ? capacitorObj.getPlatform()
+            : "unknown",
+        });
 
         const streamUrl = getStreamUrl(streamToken, true);
         const absoluteUrl = streamUrl.startsWith("http")
@@ -330,7 +389,11 @@ export default function DownloaderWrapper() {
           if (contentType.includes("webm")) ext = "webm";
           else if (contentType.includes("mp3")) ext = "mp3";
           else if (contentType.includes("m4a")) ext = "m4a";
+          logInfo("extension resolved", { contentType, ext });
         } catch (e) {
+          logWarn("HEAD request failed — falling back to .mp4", {
+            error: e instanceof Error ? e.message : String(e),
+          });
           // Fallback to default extension
         }
 
@@ -344,12 +407,18 @@ export default function DownloaderWrapper() {
           : Directory.Documents;
         const filename = `media-${Date.now()}.${ext}`;
         const path = isAndroid ? `Download/${filename}` : filename;
+        logInfo("native download — target configured", {
+          platform,
+          directory: isAndroid ? "ExternalStorage/Download" : "Documents",
+          filename,
+        });
 
         // 3. Android Permissions Check
         if (isAndroid) {
           const status = await Filesystem.checkPermissions();
           if (status.publicStorage !== "granted") {
             await Filesystem.requestPermissions();
+            logInfo("native download — requested storage permissions");
           }
         }
 
@@ -361,6 +430,10 @@ export default function DownloaderWrapper() {
               total: progress.contentLength || 0,
               downloaded: progress.bytes || 0,
             });
+            logDebug("native download progress", {
+              downloaded: progress.bytes || 0,
+              total: progress.contentLength || 0,
+            });
           },
         );
 
@@ -371,6 +444,8 @@ export default function DownloaderWrapper() {
           directory: directory,
           progress: true,
         });
+
+        logSuccess("native download completed", { path, filename });
 
         // 6. Update Download History
         if (parsedVideo) {
@@ -401,6 +476,9 @@ export default function DownloaderWrapper() {
       } catch (error: any) {
         setStreamProgress(null);
         setDownloadError(error.message || "Native download failed");
+        logError("native download failed", {
+          message: error.message || String(error),
+        });
         triggerNotification(error.message || "Native download failed");
       } finally {
         if (progressListener && typeof progressListener.remove === "function") {
@@ -436,6 +514,12 @@ export default function DownloaderWrapper() {
         throw new Error("Response has no body stream");
       }
 
+      logInfo("web download — stream opened", {
+        status: res.status,
+        contentType,
+        contentLength,
+      });
+
       const reader = res.body.getReader();
       const chunks: Uint8Array[] = [];
       let downloaded = 0;
@@ -452,6 +536,11 @@ export default function DownloaderWrapper() {
           downloaded,
         });
       }
+
+      logSuccess("web download completed", {
+        bytes: downloaded,
+        ext,
+      });
 
       const blob = new Blob(chunks as BlobPart[], { type: contentType });
       const url = URL.createObjectURL(blob);
@@ -486,6 +575,9 @@ export default function DownloaderWrapper() {
     } catch (error: any) {
       setStreamProgress(null);
       setDownloadError(error.message || "Download failed");
+      logError("web download failed", {
+        message: error.message || String(error),
+      });
     } finally {
       setIsDownloadingStream(false);
     }
@@ -493,12 +585,14 @@ export default function DownloaderWrapper() {
 
   const handleCopyHistory = (url: string, index: number) => {
     navigator.clipboard.writeText(url);
+    logInfo("copied history link", { index, url });
     triggerNotification("Copied link back to clipboard", "success");
   };
 
   const handleReFetch = (url: string, platform: string) => {
     setVideoUrl(url);
     setDetectedPlatform(platform);
+    logInfo("re-fetching history link", { platform, url });
     triggerNotification(
       "Transferred stream link back into query field.",
       "info",
@@ -509,6 +603,7 @@ export default function DownloaderWrapper() {
   const clearHistory = () => {
     setDownloadHistory([]);
     localStorage.removeItem("vdl_premium_history");
+    logInfo("download history purged");
     triggerNotification("Cache purged successfully", "info");
   };
 
@@ -521,6 +616,8 @@ export default function DownloaderWrapper() {
           onClose={() => setNotification(null)}
         />
       )}
+
+      <Terminal />
 
       <AdBanner
         highlightAds={highlightAds}
