@@ -299,6 +299,122 @@ export default function DownloaderWrapper() {
       return;
     }
 
+    const isNative =
+      typeof window !== "undefined" &&
+      (window as any).Capacitor?.isNativePlatform();
+
+    if (isNative) {
+      try {
+        setIsDownloadingStream(true);
+        setStreamProgress(null);
+        setDownloadError(null);
+
+        // Dynamically import Capacitor plugins inside the handler to prevent SSR issues
+        const { Filesystem, Directory } = await import("@capacitor/filesystem");
+        const { FileTransfer } = await import("@capacitor/file-transfer");
+
+        const streamUrl = getStreamUrl(streamToken, true);
+        const absoluteUrl = streamUrl.startsWith("http")
+          ? streamUrl
+          : `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_API_URL || ""}${streamUrl}`;
+
+        // Determine extension (default to mp4, query headers via HEAD request)
+        let ext = "mp4";
+        try {
+          const headRes = await fetch(absoluteUrl, { method: "HEAD" });
+          const contentType =
+            headRes.headers.get("content-type") || "video/mp4";
+          if (contentType.includes("webm")) {
+            ext = "webm";
+          } else if (contentType.includes("mp3")) {
+            ext = "mp3";
+          } else if (contentType.includes("m4a")) {
+            ext = "m4a";
+          }
+        } catch (e) {
+          // Fallback to default
+        }
+
+        // Determine correct directory and path based on platform
+        const isAndroid = (window as any).Capacitor.getPlatform() === "android";
+        const directory = isAndroid
+          ? Directory.ExternalStorage
+          : Directory.Documents;
+        const filename = `media-${Date.now()}.${ext}`;
+        const path = isAndroid ? `Download/${filename}` : filename;
+
+        // Check/request permissions on Android
+        if (isAndroid) {
+          const status = await Filesystem.checkPermissions();
+          if (status.publicStorage !== "granted") {
+            await Filesystem.requestPermissions();
+          }
+        }
+
+        // Get full native path URI
+        const fileInfo = await Filesystem.getUri({
+          directory,
+          path,
+        });
+
+        // Add progress listener
+        const progressListener = await FileTransfer.addListener(
+          "progress",
+          (progress: any) => {
+            setStreamProgress({
+              total: progress.contentLength || 0,
+              downloaded: progress.bytes || 0,
+            });
+          },
+        );
+
+        // Download via FileTransfer
+        await FileTransfer.downloadFile({
+          url: absoluteUrl,
+          path: fileInfo.uri,
+          progress: true,
+        });
+
+        // Cleanup progress listener
+        await progressListener.remove();
+
+        setIsDownloadingStream(false);
+
+        // Update download history
+        if (parsedVideo) {
+          const entry: DownloadHistoryItem = {
+            id: parsedVideo.id,
+            title: parsedVideo.title,
+            platform: parsedVideo.platform,
+            url: videoUrl,
+            thumbnail: parsedVideo.thumbnail,
+            timestamp: "Just now",
+            formatId: "",
+            isAudioAvailable: true,
+          };
+          const updated = [entry, ...downloadHistory]
+            .filter(
+              (item, idx, arr) =>
+                idx === arr.findIndex((h) => h.url === item.url),
+            )
+            .slice(0, 6);
+          setDownloadHistory(updated);
+          localStorage.setItem("vdl_premium_history", JSON.stringify(updated));
+        }
+
+        triggerNotification(
+          `Saved to ${isAndroid ? "Downloads" : "Documents"}!`,
+          "success",
+        );
+      } catch (error: any) {
+        setIsDownloadingStream(false);
+        setStreamProgress(null);
+        setDownloadError(error.message || "Native download failed");
+        triggerNotification(error.message || "Native download failed");
+      }
+      return;
+    }
+
     try {
       setIsDownloadingStream(true);
       setStreamProgress(null);

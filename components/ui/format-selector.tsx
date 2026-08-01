@@ -34,9 +34,6 @@ export function FormatSelector({
   countdown,
 }: FormatSelectorProps) {
   if (!parsedVideo) return null;
-
-  // console.log("thumpnail in format selector", parsedVideo.thumbnail);
-
   return (
     <section className="border rounded-2xl overflow-hidden animate-fade-in bg-white border-zinc-200 shadow-sm dark:bg-zinc-900 dark:border-zinc-800">
       <div className="px-4 py-3 border-b flex items-center justify-between gap-2 bg-zinc-50 border-zinc-200 dark:bg-zinc-950 dark:border-zinc-850">
@@ -72,7 +69,6 @@ export function FormatSelector({
 
           <div className="space-y-2.5">
             {parsedVideo.formats.map((format, idx) => {
-              console.log(format);
               return (
                 <div
                   key={idx}
@@ -114,8 +110,7 @@ export function FormatSelector({
                           : "Download to system"
                       }
                     >
-                      {loadingFormatId ===
-                      parsedVideo.formats[idx].formatId ? (
+                      {loadingFormatId === parsedVideo.formats[idx].formatId ? (
                         <>
                           <span className="w-3.5 h-3.5 rounded-full border-2 border-t-transparent animate-spin" />
                           <span>{countdown ? `${countdown}s` : "Wait"}</span>

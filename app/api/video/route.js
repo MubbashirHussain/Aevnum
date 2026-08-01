@@ -10,12 +10,6 @@ export async function GET(request) {
   // Note: HTML5 Video needs a valid start range even if none is initially provided
   const browserRange = request.headers.get("range") || "bytes=0-";
 
-  console.log("streamToken:", streamToken);
-  console.log(
-    "Backend Base URL:",
-    process.env.NEXT_PUBLIC_BACKEND_PUBLIC_API_URL,
-  );
-
   if (!streamToken) {
     return new NextResponse(JSON.stringify({ error: "Missing streamToken" }), {
       status: 400,

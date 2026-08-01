@@ -37,7 +37,6 @@ export async function fetchAPI(
   options?: RequestInit,
 ): Promise<Response> {
   if (!API_BASE) {
-    console.log("Missing NEXT_PUBLIC_BACKEND_PUBLIC_API_URL");
     throw new Error("Missing NEXT_PUBLIC_BACKEND_PUBLIC_API_URL");
   }
   const response = await fetch(`${API_BASE}${url}`, {
@@ -52,7 +51,6 @@ export async function fetchAPI(
 
 export async function analyzeUrl(url: string): Promise<SafeVideoMetadata> {
   if (!API_BASE) {
-    console.log("Missing NEXT_PUBLIC_BACKEND_PUBLIC_API_URL");
     return { error: "Missing NEXT_PUBLIC_BACKEND_PUBLIC_API_URL" };
   }
   const res = await fetchAPI("/api/download", {
